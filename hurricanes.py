@@ -211,12 +211,13 @@ mortality_scale = {
     1:[100, 499],
     2:[500, 999],
     3:[1000, 9999],
-    4:[10000, 999999999999]}
+    4:[10000, 999999999999]
+    }
 
 #dict containing keys that are increasing ratings of mortality, and values that contain dicts containing info about the hurricanes that have been given the corresponding mortality rating
 mortality_ratings = {0:[],1:[],2:[],3:[],4:[]}
 
-def rank_by_mortality():
+def rate_by_mortality():
 
     #iterates through a list of tuples where keys are hurricane names, and values are dicts containing hurricane info
     for i in list(hurricane_dict.items()):
@@ -228,7 +229,7 @@ def rank_by_mortality():
             if i[1]['Deaths'] >= mortality_scale[num][0] and i[1]['Deaths'] <= mortality_scale[num][1]:
                 mortality_ratings[num].append({i[0]:i[1]})
                 
-rank_by_mortality()
+rate_by_mortality()
 #print(mortality_ratings)
 
 
@@ -259,7 +260,34 @@ greatest_damage()
 #print(greatest_damage_dict)
 
 
-
-
-
 # write your catgeorize by damage function here:
+
+damage_scale = {
+    0:[0, 99999999],
+    1:[100000000, 999999999],
+    2:[1000000000, 9999999999],
+    3:[10000000000, 49999999999],
+    4:[50000000000, 999999999999]
+}
+
+#dict containing keys that are increasing ratings of damages in USD, and values that contain dicts containing info about the hurricanes that have been given the corresponding damage rating
+damage_ratings = {0:[],1:[],2:[],3:[],4:[]}
+
+def rate_by_damage():
+    
+    #iterates through a list of tuples where keys are hurricane names and values are dicts containing hurricane info
+    for i in list(hurricane_dict.items()):
+        
+        #iterates through range defined by number of tiers in damage scale
+        #checks if the value for damage at the current iteration of hurricane dict is within the inclusive range contained in the list in each value of damage scale. if value at current iteration is 'Damages not recorded', 0 rating assigned. 
+        #once rating in damage scale is identified, appends a dict where key is name of hurricane, and value is dict containing hurricane info to the list contained in the value of the key in damage ratings corresponding to the rating given to the hurricane
+        for num in range(len(list(damage_scale.values()))):
+            if i[1]['Damage ($USD)'] == 'Damages not recorded':
+                damage_ratings[num].append({i[0]:i[1]})
+            elif i[1]['Damage ($USD)'] >= damage_scale[num][0] and i[1]['Damage ($USD)'] <= damage_scale[num][1]:
+                damage_ratings[num].append({i[0]:i[1]})
+
+rate_by_damage()
+#print(damage_ratings)
+
+

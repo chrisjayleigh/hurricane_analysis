@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 # names of hurricanes
 names = ['Cuba I', 'San Felipe II Okeechobee', 'Bahamas', 'Cuba II', 'CubaBrownsville', 'Tampico', 'Labor Day', 'New England', 'Carol', 'Janet', 'Carla', 'Hattie', 'Beulah', 'Camille', 'Edith', 'Anita', 'David', 'Allen', 'Gilbert', 'Hugo', 'Andrew', 'Mitch', 'Isabel', 'Ivan', 'Emily', 'Katrina', 'Rita', 'Wilma', 'Dean', 'Felix', 'Matthew', 'Irma', 'Maria', 'Michael']
 
@@ -21,22 +22,28 @@ deaths = [90,4000,16,3103,179,184,408,682,5,1023,43,319,688,259,37,11,2068,269,3
 
 # write your update damages function here:
 
+
 #list of dollar values of damages for each hurricane converted to float values
 damages_floats=[]
 
-#converts value in list of damages to a float by stripping "M" or "B", converting string to float and then multiplying by corresponding value depending on which letter was stripped from string, then appends to new list. if no damages were recorded, 'No damages recorded' appended to new list
 def damages_update(damages):
+    
     abrv = {"M":1000000, "B":1000000000}
-    for value in damages:
+
+    for i in damages:
         lettercheck = 0
+
+        #converts value in list of damages to a float by stripping "M" or "B", converting string to float and then multiplying by corresponding value depending on which letter was stripped from string, then appends to new list.             
         for letter in list(abrv.keys()):
-            if letter in value:
-                stripped_value = float(value.strip(letter))
+            if letter in i:
+                stripped_value = float(i.strip(letter))
                 newvalue = stripped_value * abrv[letter]
                 damages_floats.append(newvalue)
                 lettercheck += 1
+
+        #if no damages were recorded, 'No damages recorded' appended to new list        
         if lettercheck == 0:
-            damages_floats.append(value)
+            damages_floats.append(i)
 
             
 
@@ -49,10 +56,19 @@ damages_update(damages)
 #dict of hurricanes where key is name, and value is a dict containing various info about the hurricane
 hurricane_dict = {}
 
-#iterates through range of indexes corresponding with number of hurricanes data has been provided for. updates hurricane_dict with key:value pair where key is the name of the hurricane at the current index, and value is a dict containing all data provided on the hurricane with damages entered as float values unless no data had been recorded
+
 def construct_dict():
+
+    #iterates through range of indexes corresponding with number of hurricanes data has been provided for. updates hurricane_dict with key:value pair where key is the name of the hurricane at the current index, and value is a dict containing all data provided on the hurricane with damages entered as float values unless no data had been recorded    
     for i in range(len(names)):
-        hurricane_dict.update({names[i]:{'Name':names[i], 'Month':months[i], 'Year':years[i], 'Max Sustained Wind':max_sustained_winds[i], 'Areas Affected':areas_affected[i], 'Damage':damages_floats[i], 'Deaths':deaths[i]}})
+        hurricane_dict.update({names[i]:{
+            'Name':names[i], 
+            'Month':months[i], 
+            'Year':years[i], 
+            'Max Sustained Wind':max_sustained_winds[i], 
+            'Areas Affected':areas_affected[i], 
+            'Damage':damages_floats[i], 
+            'Deaths':deaths[i]}})
 
 construct_dict()
 #print(hurricane_dict)
@@ -63,8 +79,10 @@ construct_dict()
 #dict of hurricanes where key is year of occurence, and value is a list containing dicts with data for each hurricane that occured in that year
 hurricane_year_dict = {}
 
-#iterates through the dicts stored as values in hurricane_dict, checks if the value for 'Year' in those dicts is currently a key in hurricane_year_dict. if not, creates a new key for the value contained in 'Year' with the dict corresponding to the current iteration stored inside a list as the value. if a matching key is found, appends the dict corresponding to the current iteration to the existing list that is stored as a value
 def hurricanes_by_year():
+
+    #iterates through the dicts stored as values in hurricane_dict, checks if the value for 'Year' in those dicts is currently a key in hurricane_year_dict. if not, creates a new key for the value contained in 'Year' with the dict corresponding to the current iteration stored inside a list as the value. 
+    #if a matching key is found, appends the dict corresponding to the current iteration to the existing list that is stored as a value    
     for i in hurricane_dict.values():
         if i['Year'] not in hurricane_year_dict:
             hurricane_year_dict[i['Year']] = [i]
@@ -80,9 +98,12 @@ hurricanes_by_year()
 #dict where keys are areas affected by hurricanes and values are number of times area has been affected by hurricanes
 affected_areas_dict = {}
 
-#iterates through a list of tuples containing the name of the hurricane, and a dict containing information about the hurricane, and then iterates through the 'Areas Affected' key of the dict in each tuple, updating a new dict where keys are the areas affected by hurricanes with similar areas of close proximity combined into single keys, and values are the number of times that area has been affected by hurricanes
 def count_affected_areas():
+
+    #iterates through a list of tuples containing the name of the hurricane, and a dict containing information about the hurricane
     for i in hurricane_dict.items():
+        
+        #iterates through the 'Areas Affected' key of the dict in each tuple, updating a new dict where keys are the areas affected by hurricanes with similar areas of close proximity combined into single keys, and values are the number of times that area has been affected by hurricanes    
         for area in i[1]['Areas Affected']:
             if area not in affected_areas_dict and area == 'South Florida':
                 affected_areas_dict['Florida'] += 1
@@ -103,6 +124,61 @@ count_affected_areas()
 
 # write your find most affected area function here:
 
+#dict where the key is the name of the most affected area, and the value is a dict containing key value pairs corresponding to the number of hurricanes, and the average days between hurricanes)
+most_affected_area = {}
+
+def most_affected():
+    
+    currenthighnum = 0
+    currenthigharea = 0
+    
+    #iterates through list of tuples containing area names, and number of times affected, and saves highest number and corresponding area to new variables
+    for i in list(affected_areas_dict.items()):
+        if i[1] > currenthighnum:
+            currenthighnum = i[1]
+            currenthigharea = i[0]
+ 
+    
+    yearlist = []
+    monthlist = []
+    
+    #iterates through list of tuples each containing years of hurricanes, and a list containing dicts containing information regarding hurricanes that occured that year
+    for i in list(hurricane_year_dict.items()):
+    
+        #checks the dict in each tuple to see if the saved high area is contained in areas affected, and if true, appends the year and month of hurricane to a new list    
+        for info in i[1]:
+            if currenthigharea in info['Areas Affected']:
+                yearlist.append(i[0])
+                monthlist.append(info['Month'])
+
+    
+    datelist = []
+    deltalist = []
+    average = 0
+    
+    #iterates through range corresponding to number of hurricanes the area was affected by
+    #saves month and year to new variable as a string, parses string using strptime to create a datetime object and appends to new list
+    for num in range(len(yearlist)):
+        stringformat = monthlist[num] + " " + str(yearlist[num])
+        dateobj = (datetime.strptime(stringformat, "%B %Y"))
+        datelist.append(dateobj)
+    
+    #iterates through datelist with range one less than number of hurricanes, subtracts datetime one index forward from current index to retrieve timedelta between each hurricane
+    #converts timedelta datetime object to string, cleans data and then converts string to int and appends to new list
+    for num in range(len(datelist) - 1):
+        deltalist.append(int(str(datelist[num + 1] - datelist[num]).strip("0:").strip(" days, ")))
+    
+    #calculates average delta in days between each hurricane that has affected the area and saves the value to a new variable
+    for delta in deltalist:
+        average += delta
+    average = average / len(deltalist)
+    
+    #updates dict where key is most affected area, and value is dict containing number of hurricanes in period, and average days between hurricanes
+    most_affected_area[currenthigharea] = {'Hurricanes from 1924 to 2018':currenthighnum, 'Days Between Hurricanes':average} 
+
+
+most_affected()
+print(most_affected_area)
 
 
 

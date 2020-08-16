@@ -21,6 +21,27 @@ deaths = [90,4000,16,3103,179,184,408,682,5,1023,43,319,688,259,37,11,2068,269,3
 
 # write your update damages function here:
 
+damages_floats=[]
+
+def damages_update(damages):
+    abrv = {"M":1000000, "B":1000000000}
+    for value in damages:
+        lettercheck = 0
+        for letter in list(abrv.keys()):
+            #print(letter)
+            if letter in value:
+                stripped_value = float(value.strip(letter))
+                newvalue = stripped_value * abrv[letter]
+                damages_floats.append(newvalue)
+                lettercheck += 1
+        if lettercheck == 0:
+            damages_floats.append(value)
+
+            
+
+damages_update(damages)
+print(damages_floats)
+
 
 
 

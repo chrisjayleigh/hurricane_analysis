@@ -207,10 +207,29 @@ most_deaths()
 
 # write your catgeorize by mortality function here:
 
+mortality_scale = {
+    0:[0, 99],
+    1:[100, 499],
+    2:[500, 999],
+    3:[1000, 9999],
+    4:[10000, 999999999999]}
 
+mortality_ratings = {0:[],1:[],2:[],3:[],4:[]}
 
+def rank_by_mortality():
 
-
+    #iterates through a list of tuples where keys are hurricane names, and values are dicts containing hurricane info
+    for i in list(hurricane_dict.items()):
+        
+        #iterates through range defined by number of tiers in mortality scale
+        #checks if the value for deaths at the current iteration of hurricane dict is within the inclusive range contained in the list in each value of mortality scale
+        #once rating in mortality scale is identified, appends a dict where key is name of hurricane, and value is dict where key is 'Deaths' and value is number of deaths caused by hurricane to the list contained in the value of the key in mortality ratings corresponding to the rating given to the hurricane
+        for num in range(len(list(mortality_scale.values()))):
+            if i[1]['Deaths'] >= mortality_scale[num][0] and i[1]['Deaths'] <= mortality_scale[num][1]:
+                mortality_ratings[num].append({i[0]:{'Deaths':i[1]['Deaths']}})
+                
+rank_by_mortality()
+#print(mortality_ratings)
 
 
 # write your greatest damage function here:

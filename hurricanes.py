@@ -188,7 +188,6 @@ most_deaths_caused = {}
 def most_deaths():
 
     deathhigh = 0
-    deathcane = ""
     
     #iterates through a list of tuples where keys are hurricane names, and values are dicts containing hurricane info
     #compares the value stored in the key 'Deaths' in each dict and compares it to the current highest value recorded
@@ -196,7 +195,6 @@ def most_deaths():
     for i in list(hurricane_dict.items()):
         if i[1]['Deaths'] > deathhigh:  
             deathhigh = i[1]['Deaths']
-            deathcane = i[0]
             deathinfo = i[1]
 
     #updates dict to contain a key labelled 'Most Deaths' and a value that is a dict containing info about the hurricane that caused the most deaths
@@ -242,7 +240,6 @@ greatest_damage_dict = {}
 def greatest_damage():
 
     damagehigh = 0
-    damagecane = ""
 
     #iterates through a list of tuples where keys are hurricane names, and values are dicts containing hurricane info
     #compares the value stored in the key 'Damage' in each dict and compares it to the current highest value recorded
@@ -252,7 +249,6 @@ def greatest_damage():
             continue
         if i[1]['Damage ($USD)'] > damagehigh:
             damagehigh = i[1]['Damage ($USD)']
-            damagecane = i[0]
             damageinfo = i[1]
 
     #adds key in greatest damage dict labelled 'Most Damaging Hurricane ($USD)' with a value that is a dict containing info about the hurricane that caused the most damage

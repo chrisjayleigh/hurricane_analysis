@@ -56,7 +56,18 @@ construct_dict()
 
 # write your construct hurricane by year dictionary function here:
 
+hurricane_year_dict = {}
 
+def hurricanes_by_year():
+    for i in hurricane_dict.values():
+        if i['Year'] not in hurricane_year_dict:
+            hurricane_year_dict[i['Year']] = [i]
+        else:
+            hurricane_year_dict[i['Year']].append(i)
+
+
+hurricanes_by_year()
+#print(hurricane_year_dict)
 
 
 

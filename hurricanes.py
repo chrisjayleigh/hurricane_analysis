@@ -28,7 +28,6 @@ def damages_update(damages):
     for value in damages:
         lettercheck = 0
         for letter in list(abrv.keys()):
-            #print(letter)
             if letter in value:
                 stripped_value = float(value.strip(letter))
                 newvalue = stripped_value * abrv[letter]

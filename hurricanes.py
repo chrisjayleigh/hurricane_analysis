@@ -41,7 +41,7 @@ def damages_update(damages):
                 damages_floats.append(newvalue)
                 lettercheck += 1
 
-        #if no damages were recorded, 'No damages recorded' appended to new list        
+        #if no damages were recorded, 'Damages not recorded' appended to new list        
         if lettercheck == 0:
             damages_floats.append(i)
 
@@ -67,7 +67,7 @@ def construct_dict():
             'Year':years[i], 
             'Max Sustained Wind':max_sustained_winds[i], 
             'Areas Affected':areas_affected[i], 
-            'Damage':damages_floats[i], 
+            'Damage ($USD)':damages_floats[i], 
             'Deaths':deaths[i]}})
 
 construct_dict()
@@ -182,7 +182,7 @@ most_affected()
 
 # write your greatest number of deaths function here:
 
-#dict where the key is the hurricane that caused the most deaths, and value is a dict containing a key value pair corresponding to the number of deaths caused by the hurricane
+#dict where the key is labelled 'Most Deaths' and value is a dict containing info about the hurricane that caused the most deaths
 most_deaths_caused = {}
 
 def most_deaths():
@@ -197,9 +197,10 @@ def most_deaths():
         if i[1]['Deaths'] > deathhigh:  
             deathhigh = i[1]['Deaths']
             deathcane = i[0]
-   
-    #updates dict to contain a key that is the name of the hurricane with greatest number of deaths, and a value that is a dict containing a label 'Deaths' as a key and the number of deaths as a value
-    most_deaths_caused[deathcane] = {'Deaths':deathhigh}
+            deathinfo = i[1]
+
+    #updates dict to contain a key labelled 'Most Deaths' and a value that is a dict containing info about the hurricane that caused the most deaths
+    most_deaths_caused['Most Deaths'] = deathinfo
 
 
 most_deaths()
@@ -214,6 +215,7 @@ mortality_scale = {
     3:[1000, 9999],
     4:[10000, 999999999999]}
 
+#dict containing keys that are increasing ratings of mortality, and values that contain dicts containing info about the hurricanes that have been given the corresponding mortality rating
 mortality_ratings = {0:[],1:[],2:[],3:[],4:[]}
 
 def rank_by_mortality():
@@ -223,10 +225,10 @@ def rank_by_mortality():
         
         #iterates through range defined by number of tiers in mortality scale
         #checks if the value for deaths at the current iteration of hurricane dict is within the inclusive range contained in the list in each value of mortality scale
-        #once rating in mortality scale is identified, appends a dict where key is name of hurricane, and value is dict where key is 'Deaths' and value is number of deaths caused by hurricane to the list contained in the value of the key in mortality ratings corresponding to the rating given to the hurricane
+        #once rating in mortality scale is identified, appends a dict where key is name of hurricane, and value is dict containing hurricane info to the list contained in the value of the key in mortality ratings corresponding to the rating given to the hurricane
         for num in range(len(list(mortality_scale.values()))):
             if i[1]['Deaths'] >= mortality_scale[num][0] and i[1]['Deaths'] <= mortality_scale[num][1]:
-                mortality_ratings[num].append({i[0]:{'Deaths':i[1]['Deaths']}})
+                mortality_ratings[num].append({i[0]:i[1]})
                 
 rank_by_mortality()
 #print(mortality_ratings)
@@ -234,7 +236,31 @@ rank_by_mortality()
 
 # write your greatest damage function here:
 
+#dict where the key is labelled 'Most Damaging Hurricane ($USD)' and value is a dict containing info about the hurricane that caused the most damage
+greatest_damage_dict = {}
 
+def greatest_damage():
+
+    damagehigh = 0
+    damagecane = ""
+
+    #iterates through a list of tuples where keys are hurricane names, and values are dicts containing hurricane info
+    #compares the value stored in the key 'Damage' in each dict and compares it to the current highest value recorded
+    #if value in current iteration is greater than value in variable, updates variable to value in current iteration and updates variable containing name to name of hurricane corresponding to current iteration
+    for i in list(hurricane_dict.items()):
+        if i[1]['Damage ($USD)'] == 'Damages not recorded':
+            continue
+        if i[1]['Damage ($USD)'] > damagehigh:
+            damagehigh = i[1]['Damage ($USD)']
+            damagecane = i[0]
+            damageinfo = i[1]
+
+    #adds key in greatest damage dict labelled 'Most Damaging Hurricane ($USD)' with a value that is a dict containing info about the hurricane that caused the most damage
+    greatest_damage_dict['Most Damaging Hurricane ($USD)']=damageinfo
+
+
+greatest_damage()
+#print(greatest_damage_dict)
 
 
 

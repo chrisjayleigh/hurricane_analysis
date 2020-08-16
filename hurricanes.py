@@ -39,20 +39,19 @@ def damages_update(damages):
             
 
 damages_update(damages)
-print(damages_floats)
-
-
-
-
-
+#print(damages_floats)
 
 
 # write your construct hurricane dictionary function here:
 
+hurricane_dict = {}
 
+def construct_dict():
+    for i in range(34):
+        hurricane_dict.update({names[i]:{'Name':names[i], 'Month':months[i], 'Year':years[i], 'Max Sustained Wind':max_sustained_winds[i], 'Areas Affected':areas_affected[i], 'Damage':damages_floats[i], 'Deaths':deaths[i]}})
 
-
-
+construct_dict()
+#print(hurricane_dict)
 
 
 # write your construct hurricane by year dictionary function here:

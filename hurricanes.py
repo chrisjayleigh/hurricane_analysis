@@ -178,20 +178,32 @@ def most_affected():
 
 
 most_affected()
-print(most_affected_area)
-
-
-
-
-
+#print(most_affected_area)
 
 # write your greatest number of deaths function here:
 
+#dict where the key is the hurricane that caused the most deaths, and value is a dict containing a key value pair corresponding to the number of deaths caused by the hurricane
+most_deaths_caused = {}
+
+def most_deaths():
+
+    deathhigh = 0
+    deathcane = ""
+    
+    #iterates through a list of tuples where keys are hurricane names, and values are dicts containing hurricane info
+    #compares the value stored in the key 'Deaths' in each dict and compares it to the current highest value recorded
+    #if value in current iteration is greater than value in variable, updates variable to value in current iteration and updates variable containing name to name of hurricane corresponding to current iteration
+    for i in list(hurricane_dict.items()):
+        if i[1]['Deaths'] > deathhigh:  
+            deathhigh = i[1]['Deaths']
+            deathcane = i[0]
+   
+    #updates dict to contain a key that is the name of the hurricane with greatest number of deaths, and a value that is a dict containing a label 'Deaths' as a key and the number of deaths as a value
+    most_deaths_caused[deathcane] = {'Deaths':deathhigh}
 
 
-
-
-
+most_deaths()
+#print(most_deaths_caused)
 
 # write your catgeorize by mortality function here:
 
